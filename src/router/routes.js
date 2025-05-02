@@ -3,45 +3,49 @@ const routes = [
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
     children: [
+      { path: "", component: () => import("pages/IndexPage.vue") },
+
+      { path: "novosti", component: () => import("pages/NovostiPage.vue") },
+
       {
-        path: "/",
-        component: () => import("layouts/MainLayout.vue"),
-        children: [
-          { path: "", component: () => import("pages/Index.vue") },
+        path: "hoteli/hotel1",
+        component: () => import("pages/hoteli/Hotel1Page.vue"),
+      },
+      {
+        path: "hoteli/hotel2",
+        component: () => import("pages/hoteli/Hotel2Page.vue"),
+      },
 
-          { path: "novosti", component: () => import("pages/Novosti.vue") },
+      {
+        path: "hrana/mcdonalds",
+        component: () => import("pages/hrana/McDonaldsPage.vue"),
+      },
+      {
+        path: "hrana/burger-king",
+        component: () => import("pages/hrana/BurgerKingPage.vue"),
+      },
+      {
+        path: "hrana/pizza",
+        component: () => import("pages/hrana/PizzaPage.vue"),
+      },
 
-          // Hoteli
-          {
-            path: "hoteli/hotel1",
-            component: () => import("pages/hoteli/Hotel1.vue"),
-          },
-          {
-            path: "hoteli/hotel2",
-            component: () => import("pages/hoteli/Hotel2.vue"),
-          },
-
-          // Hrana
-          {
-            path: "hrana/mcdonalds",
-            component: () => import("pages/hrana/McDonalds.vue"),
-          },
-          {
-            path: "hrana/burger-king",
-            component: () => import("pages/hrana/BurgerKing.vue"),
-          },
-          {
-            path: "hrana/pizza",
-            component: () => import("pages/hrana/Pizza.vue"),
-          },
-
-          { path: "agencije", component: () => import("pages/Agencije.vue") },
-          { path: "parking", component: () => import("pages/Parking.vue") },
-          { path: "zdravstvo", component: () => import("pages/Zdravstvo.vue") },
-          { path: "plaze", component: () => import("pages/Plaze.vue") },
-          { path: "prognoza", component: () => import("pages/Prognoza.vue") },
-          { path: "aerodrom", component: () => import("pages/Aerodrom.vue") },
-        ],
+      {
+        path: "agencije",
+        component: () => import("pages/AgencijePage.vue"),
+      },
+      { path: "parking", component: () => import("pages/ParkingPage.vue") },
+      {
+        path: "zdravstvo",
+        component: () => import("pages/ZdravstvoPage.vue"),
+      },
+      { path: "plaze", component: () => import("pages/PlazePage.vue") },
+      {
+        path: "prognoza",
+        component: () => import("pages/PrognozaPage.vue"),
+      },
+      {
+        path: "aerodrom",
+        component: () => import("pages/AerodromPage.vue"),
       },
     ],
   },
