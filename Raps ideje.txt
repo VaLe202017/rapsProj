@@ -4,3 +4,6 @@ dodati main page gdje je sva selekcija za ostale stranice, Novosti, hoteli, neka
 
 ---------------
 
+web scraping za hotele scrapeati, turistička zajednica rijeka
+parking gotov api 
+obližnje zračne luke
