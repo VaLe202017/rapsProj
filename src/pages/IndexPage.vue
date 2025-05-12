@@ -1,15 +1,15 @@
 <template>
   <q-page class="flex flex-center">
-    <img
+    <q-img
       alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
-    >
+      src="~assets\RIJEKA.jpg"
+      style="height: fit-content; border-radius: 12px"
+    />
   </q-page>
 </template>
 
 <script setup>
 defineOptions({
-  name: 'IndexPage'
+  name: "IndexPage",
 });
 </script>
