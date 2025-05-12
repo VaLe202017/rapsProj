@@ -28,6 +28,10 @@ const routes = [
         path: "hrana/pizza",
         component: () => import("pages/hrana/PizzaPage.vue"),
       },
+      {
+        path: "hrana/luksuzni-restorani",
+        component: () => import("pages/hrana/luksuzniRestoraniPage.vue"),
+      },
 
       {
         path: "agencije",

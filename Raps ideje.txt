@@ -1,3 +1,6 @@
 Raps ideje
 
 dodati main page gdje je sva selekcija za ostale stranice, Novosti, hoteli, neka mjesta za pojesti(mcdonalds, burger king, pizza places), turističke agencije, mjesta za parking, bolnice i veterinari, popularne plaže, prognoza, zračna luka.
+
+---------------
+

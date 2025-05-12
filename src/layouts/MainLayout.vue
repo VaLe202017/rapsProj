@@ -41,6 +41,9 @@
             <q-item clickable to="/hrana/pizza" class="hover-btn">
               <q-item-section>Pizza mjesta</q-item-section>
             </q-item>
+            <q-item clickable to="/hrana/luksuzni-restorani" class="hover-btn">
+              <q-item-section>Luksuzni restorani</q-item-section>
+            </q-item>
           </q-list>
         </q-btn-dropdown>
 
