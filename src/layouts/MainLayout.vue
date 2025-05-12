@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh lpR fFf" style="overflow: hidden">
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title> Info Portal </q-toolbar-title>
@@ -12,6 +12,7 @@
           class="hover-btn"
           transition-show="jump-down"
           transition-hide="jump-up"
+          auto-close
         >
           <q-list>
             <q-item clickable to="/hoteli/hotel1" class="hover-btn">
@@ -69,3 +70,26 @@
     </q-page-container>
   </q-layout>
 </template>
+<style>
+html,
+body {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+.q-layout,
+.q-page-container {
+  overflow: hidden !important;
+}
+
+.q-menu,
+.q-menu__content {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.q-list {
+  overflow: visible !important;
+  max-height: none !important;
+}
+</style>
