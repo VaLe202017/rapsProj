@@ -24,16 +24,21 @@
     <table v-if="filteredHotels.length">
       <thead>
         <tr>
-          <th>Naziv</th>
-          <th>Adresa</th>
-          <th>Zvjezdice</th>
-          <th>Ocjena</th>
-          <th>Recenzije</th>
+          <th @click="sort('name')">Naziv</th>
+          <th @click="sort('address')">Adresa</th>
+          <th @click="sort('stars')">Zvjezdice</th>
+          <th @click="sort('rating')">Ocjena</th>
+          <th @click="sort('reviewCount')">Recenzije</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="hotel in filteredHotels" :key="hotel.id">
-          <td>{{ hotel.name }}</td>
+        <tr v-for="hotel in getSortedHotels(filteredHotels)" :key="hotel.id">
+          <td>
+            <a v-if="hotel.url" :href="hotel.url" target="_blank">{{
+              hotel.name
+            }}</a>
+            <span v-else>{{ hotel.name }}</span>
+          </td>
           <td>{{ hotel.address }}</td>
           <td>{{ hotel.stars }}</td>
           <td>{{ hotel.rating }}</td>
@@ -118,6 +123,7 @@ export default {
           ...hotel,
           lat: parseFloat(hotel.latitude),
           lng: parseFloat(hotel.longitude),
+          url: hotel.url || null,
         }));
 
         this.$nextTick(() => {
@@ -208,6 +214,31 @@ export default {
           strokeWeight: 2,
           strokeColor: "#ffffff",
         },
+      });
+    },
+    sort(column) {
+      if (this.sortBy === column) {
+        this.sortDesc = !this.sortDesc;
+      } else {
+        this.sortBy = column;
+        this.sortDesc = false;
+      }
+    },
+
+    getSortedHotels(hotels) {
+      return [...hotels].sort((a, b) => {
+        let aVal = a[this.sortBy];
+        let bVal = b[this.sortBy];
+
+        // Ako je string
+        if (typeof aVal === "string") {
+          aVal = aVal.toLowerCase();
+          bVal = bVal.toLowerCase();
+        }
+
+        if (aVal < bVal) return this.sortDesc ? 1 : -1;
+        if (aVal > bVal) return this.sortDesc ? -1 : 1;
+        return 0;
       });
     },
   },
