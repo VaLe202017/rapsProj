@@ -23,25 +23,7 @@
           </q-list>
         </q-btn-dropdown>
 
-        <q-btn-dropdown
-          flat
-          label="Hrana"
-          class="hover-btn"
-          transition-show="jump-down"
-          transition-hide="jump-up"
-        >
-          <q-list>
-            <q-item clickable to="/hrana/mcdonalds" class="hover-btn">
-              <q-item-section>McDonald's</q-item-section>
-            </q-item>
-            <q-item clickable to="/hrana/burger-king" class="hover-btn">
-              <q-item-section>Burger King</q-item-section>
-            </q-item>
-            <q-item clickable to="/hrana/pizza" class="hover-btn">
-              <q-item-section>Pizza mjesta</q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+        <q-btn flat label="Hrana" to="/hrana" class="hover-btn" />
 
         <q-btn
           flat

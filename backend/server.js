@@ -1,63 +1,140 @@
-const express = require('express');
-const axios = require('axios');
-const cors = require('cors');
+const express = require("express");
+const axios = require("axios");
+const cors = require("cors");
+const https = require("https");
+const path = require("path");
+const { parse } = require("csv-parse");
+
 const app = express();
+const PORT = 3000;
 
 app.use(cors());
 
-app.get('/api/weather', async (req, res) => {
-    try {
-        const response = await axios.get('http://api.weatherapi.com/v1/current.json', {
-            params: {
-                key: 'YOUR_API_KEY', //  Zamijeni s pravim API ključem
-                q: 'Rijeka',
-                aqi: 'yes'
+const BASE_URL =
+  "https://www.gastronaut.hr/api/restoran/?active=True&county=PGZ&grad=Rijeka&format=json";
+
+//RESTORANI
+app.get("/api/restaurants", async (req, res) => {
+  const { type } = req.query;
+
+  try {
+    const response = await axios.get(BASE_URL);
+    let results = response.data.results;
+
+    if (type) {
+      results = results.filter(
+        (r) => (r.type?.name || "").toLowerCase() === type.toLowerCase()
+      );
+    }
+
+    const formatted = results.map((r) => ({
+      name: r.name,
+      type: r.type?.name || "Nepoznato",
+      link: "https://www.gastronaut.hr" + r.get_absolute_url,
+    }));
+
+    res.json(formatted);
+  } catch (err) {
+    console.error("Greška kod API poziva:", err.message);
+    res.status(500).json({ error: "Neuspješan dohvat podataka." });
+  }
+});
+
+//TIPOVI RESTORANA
+app.get("/api/types", async (req, res) => {
+  try {
+    const response = await axios.get(BASE_URL);
+    const allTypes = response.data.results
+      .map((r) => r.type?.name?.trim())
+      .filter(Boolean);
+
+    const uniqueTypes = [...new Set(allTypes)].sort();
+    res.json(uniqueTypes);
+  } catch (err) {
+    console.error("Greška kod dohvaćanja tipova:", err.message);
+    res.status(500).json({ error: "Neuspješan dohvat tipova." });
+  }
+});
+
+//PARKING
+/*
+app.get("/api/parking", async (req, res) => {
+  const csvUrl = "https://www.rijeka-plus.hr/parking/parking.csv";
+
+  https
+    .get(csvUrl, (response) => {
+      let csvData = "";
+
+      response.on("data", (chunk) => {
+        csvData += chunk;
+      });
+
+      response.on("end", () => {
+        parse(
+          csvData,
+          { columns: true, delimiter: ";", skip_empty_lines: true },
+          (err, records) => {
+            if (err) {
+              console.error("Greška kod parsiranja CSV-a:", err.message);
+              return res
+                .status(500)
+                .json({ error: "Greška kod parsiranja CSV-a." });
             }
-        });
-        res.json(response.data);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Greška pri dohvaćanju vremenskih podataka' });
-    }
+
+            const locations = records
+              .filter((r) => r["LAT"] && r["LON"])
+              .map((r) => ({
+                name: r["NAZIV"] || "Nepoznato",
+                lat: parseFloat(r["LAT"]),
+                lng: parseFloat(r["LON"]),
+                info: `Zona: ${r["ZONA"] || "?"}, Mjesta: ${
+                  r["UKUPNO"] || "?"
+                }`,
+              }));
+
+            res.json(locations);
+          }
+        );
+      });
+    })
+    .on("error", (err) => {
+      console.error("Greška kod dohvaćanja CSV-a:", err.message);
+      res.status(500).json({ error: "Greška kod dohvaćanja parking CSV-a." });
+    });
+});*/
+
+app.get("/api/parking", async (req, res) => {
+  try {
+    const response = await axios.get(
+      "https://www.rijeka-plus.hr/parking/parking.csv",
+      { responseType: "stream" }
+    );
+
+    const results = [];
+    response.data
+      .pipe(
+        parse({
+          columns: true,
+          delimiter: ";",
+          skip_empty_lines: true,
+        })
+      )
+      .on("data", (row) => {
+        results.push(row);
+      })
+      .on("end", () => {
+        res.json(results);
+      })
+      .on("error", (err) => {
+        console.error("Greška parsiranja CSV:", err);
+        res.status(500).json({ error: "Greška parsiranja CSV-a." });
+      });
+  } catch (error) {
+    console.error("Greška kod dohvaćanja CSV datoteke:", error);
+    res.status(500).json({ error: "Greška pri dohvaćanju CSV datoteke." });
+  }
 });
 
-app.get('/api/water-level', async (req, res) => {
-    try {
-        //  Zamijeni sa stvarnim endpointom i ID-em stanice
-        const response = await axios.get('https://api.pegelalarm.at/api/station/101100');
-        res.json(response.data);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Greška pri dohvaćanju podataka o razini vode' });
-    }
-});
-
-app.get('/api/air-quality', async (req, res) => {
-    try {
-        const response = await axios.get('https://api.waqi.info/feed/rijeka/', {
-            params: {
-                token: 'YOUR_API_TOKEN' //  Zamijeni s pravim tokenom
-            }
-        });
-        res.json(response.data);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Greška pri dohvaćanju podataka o kvaliteti zraka' });
-    }
-});
-
-app.get('/api/rijeka-open-data', async (req, res) => {
-    try {
-        //  Prilagodi točnim endpointima otvorenih podataka ako su dostupni
-        const response = await axios.get('https://data.rijeka.hr/api/dataset/obrazovanje');
-        res.json(response.data);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Greška pri dohvaćanju gradskih podataka' });
-    }
-});
-
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+  console.log(`✅ API server radi na http://localhost:${PORT}`);
 });

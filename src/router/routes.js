@@ -17,16 +17,8 @@ const routes = [
       },
 
       {
-        path: "hrana/mcdonalds",
-        component: () => import("pages/hrana/McDonaldsPage.vue"),
-      },
-      {
-        path: "hrana/burger-king",
-        component: () => import("pages/hrana/BurgerKingPage.vue"),
-      },
-      {
-        path: "hrana/pizza",
-        component: () => import("pages/hrana/PizzaPage.vue"),
+        path: "hrana",
+        component: () => import("pages/HranaPage.vue"),
       },
 
       {
