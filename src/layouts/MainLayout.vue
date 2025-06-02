@@ -6,23 +6,7 @@
 
         <q-btn flat label="Novosti" to="/novosti" class="hover-btn" />
 
-        <q-btn-dropdown
-          flat
-          label="Hoteli"
-          class="hover-btn"
-          transition-show="jump-down"
-          transition-hide="jump-up"
-          auto-close
-        >
-          <q-list>
-            <q-item clickable to="/hoteli/hotel1" class="hover-btn">
-              <q-item-section>Hotel 1</q-item-section>
-            </q-item>
-            <q-item clickable to="/hoteli/hotel2" class="hover-btn">
-              <q-item-section>Hotel 2</q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+        <q-btn flat label="Hoteli" class="hover-btn" to="/hoteli" />
 
         <q-btn flat label="Hrana" class="hover-btn" to="/hrana" />
         <q-btn

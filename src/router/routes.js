@@ -8,12 +8,8 @@ const routes = [
       { path: "novosti", component: () => import("pages/NovostiPage.vue") },
 
       {
-        path: "hoteli/hotel1",
-        component: () => import("pages/hoteli/Hotel1Page.vue"),
-      },
-      {
-        path: "hoteli/hotel2",
-        component: () => import("pages/hoteli/Hotel2Page.vue"),
+        path: "hoteli",
+        component: () => import("src/pages/HoteliPage.vue"),
       },
 
       {
