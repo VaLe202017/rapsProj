@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh lpR fFf" style="overflow: hidden">
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title> Info Portal </q-toolbar-title>
@@ -12,6 +12,7 @@
           class="hover-btn"
           transition-show="jump-down"
           transition-hide="jump-up"
+          auto-close
         >
           <q-list>
             <q-item clickable to="/hoteli/hotel1" class="hover-btn">
@@ -23,7 +24,25 @@
           </q-list>
         </q-btn-dropdown>
 
-        <q-btn flat label="Hrana" to="/hrana" class="hover-btn" />
+        <q-btn-dropdown
+          flat
+          label="Hrana"
+          class="hover-btn"
+          transition-show="jump-down"
+          transition-hide="jump-up"
+        >
+          <q-list>
+            <q-item clickable to="/hrana/mcdonalds" class="hover-btn">
+              <q-item-section>McDonald's</q-item-section>
+            </q-item>
+            <q-item clickable to="/hrana/burger-king" class="hover-btn">
+              <q-item-section>Burger King</q-item-section>
+            </q-item>
+            <q-item clickable to="/hrana/pizza" class="hover-btn">
+              <q-item-section>Pizza mjesta</q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
 
         <q-btn
           flat
@@ -51,3 +70,26 @@
     </q-page-container>
   </q-layout>
 </template>
+<style>
+html,
+body {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+.q-layout,
+.q-page-container {
+  overflow: hidden !important;
+}
+
+.q-menu,
+.q-menu__content {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.q-list {
+  overflow: visible !important;
+  max-height: none !important;
+}
+</style>

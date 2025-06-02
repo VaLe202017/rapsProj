@@ -20,6 +20,10 @@ const routes = [
         path: "hrana",
         component: () => import("pages/HranaPage.vue"),
       },
+      {
+        path: "hrana/luksuzni-restorani",
+        component: () => import("pages/hrana/luksuzniRestoraniPage.vue"),
+      },
 
       {
         path: "agencije",
