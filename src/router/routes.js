@@ -8,8 +8,8 @@ const routes = [
       { path: "novosti", component: () => import("pages/NovostiPage.vue") },
 
       {
-        path: "hoteli",
-        component: () => import("src/pages/HoteliPage.vue"),
+        path: "smjestaj",
+        component: () => import("src/pages/SmjestajPage.vue"),
       },
 
       {

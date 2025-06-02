@@ -2,6 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
 const fetch = require("node-fetch");
+const xml2js = require("xml2js");
 
 const https = require("https");
 const path = require("path");
@@ -100,29 +101,73 @@ app.get("/api/parking", async (req, res) => {
   }
 });
 
-app.get("/api/hoteli", async (req, res) => {
+app.get("/api/vrijeme", async (req, res) => {
   try {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        "X-API-Key": "sand_07faec88-e4ba-4ae7-9b52-7e64f4585a63",
-      },
+    const { data } = await axios.get("https://vrijeme.hr/hrvatska1_n.xml");
+    const parsed = await xml2js.parseStringPromise(data, {
+      explicitArray: false,
+    });
+
+    const gradovi = parsed.Hrvatska.Grad;
+    const rijeka = Array.isArray(gradovi)
+      ? gradovi.find((g) => g.GradIme === "Rijeka")
+      : gradovi;
+
+    const prognoza = {
+      grad: rijeka.GradIme,
+      lat: rijeka.Lat,
+      lon: rijeka.Lon,
+      temperatura: rijeka.Podatci.Temp.trim(),
+      vlaga: rijeka.Podatci.Vlaga,
+      tlak: rijeka.Podatci.Tlak,
+      vjetarSmjer: rijeka.Podatci.VjetarSmjer,
+      vjetarBrzina: rijeka.Podatci.VjetarBrzina,
+      vrijeme: rijeka.Podatci.Vrijeme,
     };
 
-    const response = await fetch(
-      "https://api.liteapi.travel/v3.0/data/hotels?countryCode=hr&cityName=Rijeka",
-      options
-    );
-    const data = await response.json();
-
-    res.status(200).json(data);
+    res.json(prognoza);
   } catch (error) {
-    console.error("Greška kod dohvaćanja hotela:", error);
-    res.status(500).json({ error: "Greška kod dohvaćanja podataka" });
+    console.error("Greška kod dohvaćanja prognoze:", error.message);
+    res.status(500).json({ error: "Neuspješno dohvaćanje prognoze" });
+  }
+});
+
+// Dohvati temperaturu mora za Rijeku
+// MORE – detaljno po terminima
+app.get("/api/more", async (req, res) => {
+  try {
+    const { data } = await axios.get("https://vrijeme.hr/more_n.xml");
+    const parsed = await xml2js.parseStringPromise(data, {
+      explicitArray: false,
+    });
+
+    const podaci = parsed.Temperature_mora.Podatci;
+
+    // Prva stavka je zaglavlje (termini), preskoči
+    const temperature = podaci.slice(1).map((p) => {
+      const lokacija = p.Postaja;
+      const termini = Array.isArray(p.Termin) ? p.Termin : [p.Termin];
+
+      return {
+        lokacija,
+        termini: {
+          "07": termini[0] || "-",
+          "08": termini[1] || "-",
+          11: termini[2] || "-",
+          14: termini[3] || "-",
+          15: termini[4] || "-",
+          17: termini[5] || "-",
+        },
+      };
+    });
+
+    res.json(temperature);
+  } catch (error) {
+    console.error("Greška kod dohvaćanja temperature mora:", error.message);
+    res.status(500).json({ error: "Neuspješno dohvaćanje temperature mora" });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ API server radi na http://localhost:${PORT}`);
+  console.log(`API server radi na http://localhost:${PORT}`);
 });
