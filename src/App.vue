@@ -9,6 +9,14 @@ defineOptions({
 </script>
 
 <style>
+html,
+body,
+#app {
+  height: auto !important;
+  overflow: auto !important;
+  margin: 0;
+  padding: 0;
+}
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.4s ease;
